@@ -1,51 +1,49 @@
 body {
     margin: 0;
-    background: #0F111A;
-    color: white;
-    font-family: Arial, sans-serif;
+    background: #05070C;
+    color: #E5E7EB;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 .hidden {
     display: none;
 }
 
-/* Верхняя панель */
+/* Top bar */
 #top-bar {
-    height: 60px;
-    background: #151823;
+    height: 52px;
+    background: #0B0E18;
     display: flex;
     align-items: center;
-    padding: 0 20px;
-    box-shadow: 0 0 20px rgba(124, 76, 255, 0.2);
-    position: sticky;
-    top: 0;
-    z-index: 500;
-}
-
-#top-bar h2 {
-    margin: 0;
+    padding: 0 16px;
+    border-bottom: 1px solid #111827;
 }
 
 #menu-btn {
-    font-size: 24px;
+    font-size: 22px;
     background: none;
     border: none;
-    color: white;
+    color: #E5E7EB;
     cursor: pointer;
-    margin-right: 20px;
+    margin-right: 12px;
 }
 
-/* Выдвижное меню */
+.top-title {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+/* Side menu */
 #side-menu {
     position: fixed;
     top: 0;
     left: -260px;
     width: 260px;
     height: 100%;
-    background: #151823;
-    box-shadow: 0 0 25px rgba(124, 76, 255, 0.3);
-    padding: 20px;
-    transition: 0.3s ease;
+    background: #0B0E18;
+    box-shadow: 0 0 30px rgba(0,0,0,0.8);
+    padding: 12px 12px 24px;
+    transition: 0.25s ease;
     z-index: 1000;
 }
 
@@ -53,17 +51,27 @@ body {
     left: 0;
 }
 
-.menu-item {
+.menu-header {
     padding: 12px;
-    margin: 10px 0;
-    background: #1C1F2B;
+    border-bottom: 1px solid #1F2937;
+    margin-bottom: 8px;
+}
+
+.menu-title {
+    font-weight: 600;
+}
+
+.menu-item {
+    padding: 10px 12px;
     border-radius: 8px;
+    margin-top: 6px;
     cursor: pointer;
-    transition: 0.2s;
+    font-size: 14px;
+    color: #D1D5DB;
 }
 
 .menu-item:hover {
-    background: #4C6FFF;
+    background: #111827;
 }
 
 /* Overlay */
@@ -73,7 +81,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0,0,0,0.45);
     display: none;
     z-index: 900;
 }
@@ -82,58 +90,73 @@ body {
     display: block;
 }
 
-/* Основные контейнеры */
+/* Main container */
 #main-container {
     height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
+/* Auth */
 #auth {
+    padding: 40px 16px;
     text-align: center;
-    padding-top: 40px;
 }
 
 h1 {
-    font-size: 48px;
+    font-size: 40px;
     background: linear-gradient(90deg, #4C6FFF, #7B4CFF);
     -webkit-background-clip: text;
     color: transparent;
+    margin-bottom: 24px;
+}
+
+.auth-row {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
 }
 
 .card {
-    background: #151823;
+    background: #0B0E18;
     padding: 20px;
-    margin: 20px auto;
-    width: 300px;
+    width: 280px;
     border-radius: 12px;
-    box-shadow: 0 0 20px rgba(124, 76, 255, 0.2);
+    border: 1px solid #111827;
+}
+
+.card h2 {
+    font-size: 16px;
+    margin-top: 0;
 }
 
 input {
-    width: 90%;
-    padding: 10px;
-    margin: 8px 0;
+    width: 100%;
+    padding: 9px 10px;
+    margin: 7px 0;
     border-radius: 8px;
     border: none;
-    background: #1C1F2B;
-    color: white;
+    outline: none;
+    background: #020617;
+    color: #E5E7EB;
+    font-size: 14px;
 }
 
 button {
-    width: 95%;
-    padding: 10px;
+    padding: 9px;
     border: none;
     border-radius: 8px;
     background: linear-gradient(90deg, #4C6FFF, #7B4CFF);
     color: white;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 500;
+    font-size: 14px;
+    margin-top: 6px;
 }
 
 button.small-btn {
     width: 100%;
-    margin-bottom: 10px;
 }
 
 /* App layout */
@@ -143,39 +166,75 @@ button.small-btn {
     min-height: 0;
 }
 
-/* Sidebar */
-#sidebar {
-    width: 280px;
-    background: #151823;
-    padding: 20px;
-    box-shadow: 0 0 20px rgba(124, 76, 255, 0.2);
+/* Left panel (chats) */
+#left-panel {
+    width: 300px;
+    background: #050814;
+    border-right: 1px solid #111827;
+    display: flex;
+    flex-direction: column;
+}
+
+.search-block {
+    padding: 10px;
+    border-bottom: 1px solid #111827;
+}
+
+#search-results {
+    max-height: 180px;
     overflow-y: auto;
+    border-bottom: 1px solid #111827;
 }
 
 .section-title {
-    margin-top: 10px;
-    margin-bottom: 6px;
-    font-size: 14px;
-    color: #9CA3AF;
+    padding: 8px 10px 4px;
+    font-size: 12px;
+    color: #6B7280;
 }
 
-#search-results div,
-#chat-list div {
-    padding: 10px;
-    background: #1C1F2B;
-    margin: 8px 0;
-    border-radius: 8px;
+#chat-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.chat-item,
+.search-result-item {
+    padding: 9px 12px;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #020617;
     cursor: pointer;
-    transition: 0.2s;
 }
 
-#search-results div:hover,
-#chat-list div:hover {
-    background: #4C6FFF;
+.chat-item:hover,
+.search-result-item:hover {
+    background: #0B1020;
 }
 
-/* Chat area */
-#chat {
+.chat-title-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-name {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.chat-id {
+    font-size: 11px;
+    color: #6B7280;
+}
+
+.chat-last {
+    font-size: 12px;
+    color: #9CA3AF;
+    margin-top: 3px;
+}
+
+/* Right panel (chat) */
+#right-panel {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -183,86 +242,123 @@ button.small-btn {
 }
 
 #chat-header {
-    height: 50px;
-    border-bottom: 1px solid #1F2933;
+    height: 56px;
+    border-bottom: 1px solid #111827;
     display: flex;
     align-items: center;
-    padding: 0 20px;
-    background: #111320;
+    justify-content: space-between;
+    padding: 0 14px;
+    background: #050814;
 }
 
-#chat-partner-name {
-    font-weight: bold;
+.chat-title {
+    font-size: 15px;
+    font-weight: 500;
 }
 
+.chat-subtitle {
+    font-size: 12px;
+    color: #6B7280;
+}
+
+#call-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    padding: 0;
+}
+
+/* Messages */
 #messages {
     flex: 1;
-    padding: 20px;
+    padding: 14px;
     overflow-y: auto;
+    background: #020617;
 }
 
 .msg {
-    background: #1C1F2B;
-    padding: 10px;
-    margin: 8px 0;
-    border-radius: 8px;
     max-width: 70%;
+    padding: 8px 10px;
+    border-radius: 12px;
+    margin-bottom: 6px;
+    background: #050814;
+    font-size: 13px;
 }
 
 .msg.me {
-    background: linear-gradient(90deg, #4C6FFF, #7B4CFF);
     margin-left: auto;
+    background: linear-gradient(135deg, #4C6FFF, #7B4CFF);
 }
 
 .msg .author {
-    font-size: 12px;
-    color: #CBD5F5;
-    margin-bottom: 4px;
+    font-size: 11px;
+    color: #9CA3AF;
+    margin-bottom: 2px;
 }
 
 .msg .text {
-    font-size: 14px;
+    font-size: 13px;
 }
 
-/* Input area */
+/* Input */
 #input-area {
     display: flex;
-    padding: 10px;
-    background: #151823;
+    padding: 8px;
+    border-top: 1px solid #111827;
+    background: #050814;
 }
 
 #msg-input {
     flex: 1;
-    margin-right: 10px;
+    margin-right: 8px;
 }
 
-/* Профиль (модалка) */
+/* Modal */
 .modal {
     position: fixed;
     top: 80px;
-    right: 30px;
+    right: 20px;
     width: 280px;
-    background: #151823;
+    background: #050814;
     border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 0 25px rgba(124, 76, 255, 0.4);
+    padding: 16px;
+    border: 1px solid #111827;
+    box-shadow: 0 0 30px rgba(0,0,0,0.8);
     z-index: 800;
-}
-
-.modal img {
-    border-radius: 50%;
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border: 3px solid #4C6FFF;
-    margin-bottom: 10px;
+    font-size: 14px;
 }
 
 .modal h2 {
-    margin: 0 0 8px 0;
+    margin: 0 0 4px;
+    font-size: 16px;
 }
 
 .modal p {
-    margin: 4px 0;
+    margin: 3px 0;
+    color: #9CA3AF;
 }
+
+.modal input {
+    margin-top: 6px;
+}
+
+/* Call modal */
+#call-modal {
+    left: 50%;
+    transform: translateX(-50%);
+    width: 260px;
+    text-align: center;
+}
+
+#call-status {
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.call-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
 
