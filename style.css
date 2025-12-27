@@ -1,0 +1,102 @@
+body {
+    margin: 0;
+    background: #0F111A;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.hidden {
+    display: none;
+}
+
+#auth {
+    text-align: center;
+    padding-top: 80px;
+}
+
+h1 {
+    font-size: 48px;
+    background: linear-gradient(90deg, #4C6FFF, #7B4CFF);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.card {
+    background: #151823;
+    padding: 20px;
+    margin: 20px auto;
+    width: 300px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(124, 76, 255, 0.2);
+}
+
+input {
+    width: 90%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: none;
+    background: #1C1F2B;
+    color: white;
+}
+
+button {
+    width: 95%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #4C6FFF, #7B4CFF);
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#app {
+    display: flex;
+    height: 100vh;
+}
+
+#sidebar {
+    width: 250px;
+    background: #151823;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(124, 76, 255, 0.2);
+}
+
+#chat-list div {
+    padding: 10px;
+    background: #1C1F2B;
+    margin: 8px 0;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#chat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.msg {
+    background: #1C1F2B;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+}
+
+#input-area {
+    display: flex;
+    padding: 10px;
+    background: #151823;
+}
+
+#msg-input {
+    flex: 1;
+    margin-right: 10px;
+}
