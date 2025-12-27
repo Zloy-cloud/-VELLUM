@@ -7,66 +7,80 @@
 </head>
 <body>
 
-<!-- Sidebar меню -->
+<!-- Выдвижное меню (как сайдбар настроек) -->
 <div id="side-menu">
     <div class="menu-header">
-        <div class="menu-title">VELLUM</div>
+        <div class="menu-app">VELLUM</div>
+        <div class="menu-user" id="menu-user-label">@user</div>
     </div>
-    <div class="menu-item" onclick="openProfile()">Профиль</div>
-    <div class="menu-item">Настройки (soon)</div>
-    <div class="menu-item">VELLUM+ (soon)</div>
-    <div class="menu-item">Подарки (soon)</div>
+    <div class="menu-item" onclick="openMyProfile()">Мой профиль</div>
+    <div class="menu-item">Настройки (скоро)</div>
+    <div class="menu-item">VELLUM+ (скоро)</div>
+    <div class="menu-item">Подарки (скоро)</div>
     <div class="menu-item" onclick="logout()">Выйти</div>
 </div>
 <div id="menu-overlay" onclick="toggleMenu()"></div>
 
-<div id="main-container">
+<div id="root">
 
+    <!-- Верхняя панель -->
     <div id="top-bar">
         <button id="menu-btn" onclick="toggleMenu()">☰</button>
         <div class="top-title">VELLUM</div>
     </div>
 
-    <!-- Экран авторизации -->
-    <div id="auth">
-        <h1>VELLUM</h1>
+    <!-- Блок авторизации -->
+    <div id="auth-screen">
+        <div class="auth-center">
+            <div class="auth-logo">VELLUM</div>
+            <div class="auth-subtitle">Мессенджер в стиле Telegram</div>
 
-        <div class="auth-row">
-            <div class="card">
-                <h2>Login</h2>
-                <input id="login-username" placeholder="@username">
-                <input id="login-password" type="password" placeholder="Password">
-                <button onclick="login()">Login</button>
-            </div>
+            <div class="auth-panels">
+                <div class="card">
+                    <h2>Вход</h2>
+                    <input id="login-username" placeholder="@username">
+                    <input id="login-password" type="password" placeholder="Пароль">
+                    <button onclick="login()">Войти</button>
+                </div>
 
-            <div class="card">
-                <h2>Register</h2>
-                <input id="reg-username" placeholder="@username">
-                <input id="reg-password" type="password" placeholder="Password">
-                <button onclick="register()">Register</button>
+                <div class="card">
+                    <h2>Регистрация</h2>
+                    <input id="reg-username" placeholder="@username">
+                    <input id="reg-password" type="password" placeholder="Пароль">
+                    <button onclick="register()">Создать аккаунт</button>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Основное приложение -->
-    <div id="app" class="hidden">
-        <div id="left-panel">
-            <div class="search-block">
+    <div id="app-screen" class="hidden">
+        <!-- Левая колонка: чат‑лист и поиск -->
+        <div id="left-column">
+            <div id="left-header">
+                <div class="left-title">Чаты</div>
+            </div>
+
+            <div id="search-block">
                 <input id="search-query" placeholder="Поиск по @username или ID">
-                <button class="small-btn" onclick="searchUser()">Поиск</button>
+                <button class="small-btn" onclick="searchUser()">Найти</button>
             </div>
 
             <div id="search-results"></div>
 
-            <div class="section-title">Чаты</div>
+            <div class="section-label">Недавние чаты</div>
             <div id="chat-list"></div>
         </div>
 
-        <div id="right-panel">
+        <!-- Правая колонка: текущий чат -->
+        <div id="right-column">
             <div id="chat-header">
-                <div>
-                    <div id="chat-partner-name" class="chat-title">Выберите чат</div>
-                    <div id="chat-partner-id" class="chat-subtitle"></div>
+                <div class="chat-header-left" onclick="openCurrentPartnerProfile()">
+                    <div id="chat-avatar" class="chat-avatar">V</div>
+                    <div>
+                        <div id="chat-partner-name" class="chat-title">Выберите чат</div>
+                        <div id="chat-partner-id" class="chat-subtitle"></div>
+                    </div>
                 </div>
                 <button id="call-btn" onclick="startCall()" disabled>📞</button>
             </div>
@@ -74,18 +88,18 @@
             <div id="messages"></div>
 
             <div id="input-area">
-                <input id="msg-input" placeholder="Message...">
-                <button onclick="sendMessage()">Send</button>
+                <input id="msg-input" placeholder="Напишите сообщение...">
+                <button onclick="sendMessage()">Отправить</button>
             </div>
         </div>
     </div>
 
-    <!-- Модалка профиля -->
+    <!-- Модалка профиля (любой пользователь: я или другой) -->
     <div id="profile-modal" class="modal hidden"></div>
 
     <!-- Модалка звонка -->
     <div id="call-modal" class="modal hidden">
-        <div id="call-status">Calling...</div>
+        <div id="call-status">Звонок...</div>
         <div id="call-user-info"></div>
         <div class="call-buttons">
             <button id="call-accept" onclick="acceptCall()">Принять</button>
