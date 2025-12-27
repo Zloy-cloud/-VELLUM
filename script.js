@@ -119,3 +119,22 @@ function sendMessage() {
 function parseJwt(t) {
     return JSON.parse(atob(t.split('.')[1]));
 }
+
+function toggleMenu() {
+    const menu = document.getElementById("side-menu");
+    const overlay = document.getElementById("menu-overlay");
+
+    if (menu.classList.contains("open")) {
+        menu.classList.remove("open");
+        overlay.classList.remove("show");
+    } else {
+        menu.classList.add("open");
+        overlay.classList.add("show");
+    }
+}
+
+function logout() {
+    token = null;
+    location.reload();
+}
+
