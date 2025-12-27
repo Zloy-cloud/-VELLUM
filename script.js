@@ -5,6 +5,7 @@ const API = "https://my-messenger-7pn7.onrender.com";
 let token = null;
 let currentUser = null;
 let socket = null;
+
 let currentChat = null;
 let currentChatPartner = null;
 
@@ -12,7 +13,6 @@ let currentChatPartner = null;
 let peer = null;
 let localStream = null;
 let inCallWith = null;
-let isCaller = false;
 
 // ====== AUTH ======
 
@@ -49,6 +49,7 @@ function login() {
         if (d.token) {
             token = d.token;
             currentUser = parseJwt(token);
+            document.getElementById("menu-user-label").innerText = "@" + currentUser.username + " | ID: " + currentUser.id;
             initApp();
         } else {
             alert("Login failed: " + (d.error || "Unknown error"));
@@ -65,8 +66,8 @@ function logout() {
 // ====== INIT APP ======
 
 function initApp() {
-    document.getElementById("auth").classList.add("hidden");
-    document.getElementById("app").classList.remove("hidden");
+    document.getElementById("auth-screen").classList.add("hidden");
+    document.getElementById("app-screen").classList.remove("hidden");
 
     socket = io(API);
     socket.emit("join", currentUser.id);
@@ -77,15 +78,14 @@ function initApp() {
         }
     });
 
-    // Звонки
+    // сигнальный слой звонков
     socket.on("call_incoming", ({ from }) => {
         if (inCallWith) {
             socket.emit("call_end", { to: from });
             return;
         }
         inCallWith = from;
-        isCaller = false;
-        showCallModal("Входящий звонок", "User ID: " + from, true);
+        showCallModal("Входящий звонок", "ID: " + from, true);
     });
 
     socket.on("call_offer", async ({ from, offer }) => {
@@ -147,6 +147,17 @@ function loadChats() {
             const div = document.createElement("div");
             div.className = "chat-item";
 
+            const avatar = document.createElement("div");
+            avatar.className = "chat-avatar-small";
+            let label = "?";
+            if (c.partner && c.partner.username) {
+                label = c.partner.username[0].toUpperCase();
+            }
+            avatar.innerText = label;
+
+            const textWrap = document.createElement("div");
+            textWrap.className = "chat-item-text";
+
             let name = "Chat " + c.id;
             let idText = "";
             if (c.partner) {
@@ -154,21 +165,19 @@ function loadChats() {
                 idText = "ID: " + c.partner.id;
             }
 
-            const titleLine = document.createElement("div");
-            titleLine.className = "chat-title-line";
-
             const nameEl = document.createElement("div");
-            nameEl.className = "chat-name";
+            nameEl.className = "chat-item-name";
             nameEl.innerText = name;
 
             const idEl = document.createElement("div");
-            idEl.className = "chat-id";
+            idEl.className = "chat-item-id";
             idEl.innerText = idText;
 
-            titleLine.appendChild(nameEl);
-            titleLine.appendChild(idEl);
+            textWrap.appendChild(nameEl);
+            textWrap.appendChild(idEl);
 
-            div.appendChild(titleLine);
+            div.appendChild(avatar);
+            div.appendChild(textWrap);
 
             div.onclick = () => openChat(c.id, c.partner);
             list.appendChild(div);
@@ -182,16 +191,19 @@ function openChat(id, partner) {
 
     const nameEl = document.getElementById("chat-partner-name");
     const idEl = document.getElementById("chat-partner-id");
+    const avatarEl = document.getElementById("chat-avatar");
     const callBtn = document.getElementById("call-btn");
 
     if (partner) {
         nameEl.innerText = "@" + partner.username;
         idEl.innerText = "ID: " + partner.id;
         callBtn.disabled = false;
+        avatarEl.innerText = partner.username[0].toUpperCase();
     } else {
         nameEl.innerText = "Chat " + id;
         idEl.innerText = "";
         callBtn.disabled = true;
+        avatarEl.innerText = "V";
     }
 
     fetch(API + "/messages/" + id, {
@@ -274,21 +286,26 @@ function searchUser() {
             const div = document.createElement("div");
             div.className = "search-result-item";
 
-            const titleLine = document.createElement("div");
-            titleLine.className = "chat-title-line";
+            const avatar = document.createElement("div");
+            avatar.className = "chat-avatar-small";
+            avatar.innerText = u.username[0].toUpperCase();
+
+            const textWrap = document.createElement("div");
+            textWrap.className = "chat-item-text";
 
             const nameEl = document.createElement("div");
-            nameEl.className = "chat-name";
+            nameEl.className = "chat-item-name";
             nameEl.innerText = "@" + u.username;
 
             const idEl = document.createElement("div");
-            idEl.className = "chat-id";
+            idEl.className = "chat-item-id";
             idEl.innerText = "ID: " + u.id;
 
-            titleLine.appendChild(nameEl);
-            titleLine.appendChild(idEl);
+            textWrap.appendChild(nameEl);
+            textWrap.appendChild(idEl);
 
-            div.appendChild(titleLine);
+            div.appendChild(avatar);
+            div.appendChild(textWrap);
 
             div.onclick = () => createChatWithUser(u.id);
             box.appendChild(div);
@@ -308,7 +325,6 @@ function createChatWithUser(id) {
     .then(r => r.json())
     .then(chat => {
         loadChats();
-        // найдем партнера через поиск ещё раз
         fetch(API + "/user/" + id, {
             headers: { "Authorization": "Bearer " + token }
         })
@@ -319,12 +335,23 @@ function createChatWithUser(id) {
     });
 }
 
-// ====== PROFILE ======
+// ====== ПРОФИЛИ ======
 
-function openProfile() {
+// Мой профиль из сайдбара
+function openMyProfile() {
     if (!currentUser) return;
+    openUserProfile(currentUser.id, true);
+}
 
-    fetch(API + "/user/" + currentUser.id, {
+// Профиль текущего собеседника по клику на шапку чата
+function openCurrentPartnerProfile() {
+    if (!currentChatPartner) return;
+    openUserProfile(currentChatPartner.id, false);
+}
+
+// Просмотр любого профиля (я / другой)
+function openUserProfile(userId, isMe) {
+    fetch(API + "/user/" + userId, {
         headers: { "Authorization": "Bearer " + token }
     })
     .then(r => r.json())
@@ -332,19 +359,22 @@ function openProfile() {
         const box = document.getElementById("profile-modal");
         box.classList.remove("hidden");
 
-        const avatar = u.avatar || "https://via.placeholder.com/80x80.png?text=V";
+        const avatarUrl = u.avatar || "https://via.placeholder.com/80x80.png?text=V";
+        const header = isMe ? "Мой профиль" : "Профиль пользователя";
 
         box.innerHTML = `
-            <h2>@${u.username}</h2>
+            <h2>${header}</h2>
+            <p>@${u.username}</p>
             <p>ID: ${u.id}</p>
             <p>${u.premium ? "VELLUM+ user" : "Free user"}</p>
-            <p>${u.bio || "No bio yet."}</p>
-
-            <input id="new-username" placeholder="@username" value="@${u.username}">
-            <input id="new-bio" placeholder="Bio" value="${u.bio || ""}">
-            <input id="new-avatar" placeholder="Avatar URL" value="${u.avatar || ""}">
-            <button onclick="saveProfile()">Save</button>
-            <button onclick="closeProfile()">Close</button>
+            <p>${u.bio || "Нет описания."}</p>
+            ${isMe ? `
+                <input id="new-username" placeholder="@username" value="@${u.username}">
+                <input id="new-bio" placeholder="Bio" value="${u.bio || ""}">
+                <input id="new-avatar" placeholder="Avatar URL" value="${u.avatar || ""}">
+                <button onclick="saveProfile()">Сохранить</button>
+            ` : ""}
+            <button onclick="closeProfile()">Закрыть</button>
         `;
     });
 }
@@ -371,13 +401,14 @@ function saveProfile() {
         if (d.error) {
             alert("Error: " + d.error);
         } else {
-            alert("Profile updated");
-            openProfile(); // обновить данные в модалке
+            alert("Профиль обновлён");
+            document.getElementById("menu-user-label").innerText = "@" + d.user.username + " | ID: " + d.user.id;
+            openMyProfile();
         }
     });
 }
 
-// ====== CALL (AUDIO ONLY) ======
+// ====== CALL (audio only, без камеры) ======
 
 async function createPeer(targetId) {
     inCallWith = targetId;
@@ -406,13 +437,11 @@ async function createPeer(targetId) {
     localStream.getTracks().forEach(track => peer.addTrack(track, localStream));
 }
 
-function showCallModal(status, info, showAccept = false) {
+function showCallModal(status, info, showAccept) {
     const modal = document.getElementById("call-modal");
     modal.classList.remove("hidden");
-
     document.getElementById("call-status").innerText = status;
-    document.getElementById("call-user-info").innerText = info;
-
+    document.getElementById("call-user-info").innerText = info || "";
     document.getElementById("call-accept").style.display = showAccept ? "inline-block" : "none";
 }
 
@@ -427,9 +456,6 @@ async function startCall() {
     }
 
     const targetId = currentChatPartner.id;
-    if (!targetId) return;
-
-    isCaller = true;
     await createPeer(targetId);
 
     const offer = await peer.createOffer();
@@ -438,13 +464,12 @@ async function startCall() {
     socket.emit("call_start", { to: targetId });
     socket.emit("call_offer", { to: targetId, offer });
 
-    showCallModal("Звонок...", "@"+currentChatPartner.username + " (ID: " + targetId + ")", false);
+    showCallModal("Звонок...", "@" + currentChatPartner.username + " (ID: " + targetId + ")", false);
 }
 
 async function acceptCall() {
-    if (!inCallWith) return;
+    // offer уже обработан, peer создан в socket.on("call_offer")
     hideCallModal();
-    // peer создаётся при получении offer (в обработчике call_offer)
 }
 
 function endCall() {
@@ -468,10 +493,9 @@ function endCallInternal(statusText) {
     showCallModal(statusText, "", false);
     setTimeout(() => hideCallModal(), 800);
     inCallWith = null;
-    isCaller = false;
 }
 
-// ====== JWT PARSE ======
+// ====== JWT ======
 
 function parseJwt(t) {
     return JSON.parse(atob(t.split('.')[1]));
