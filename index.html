@@ -7,9 +7,11 @@
 </head>
 <body>
 
-<!-- Выдвижное меню -->
+<!-- Sidebar меню -->
 <div id="side-menu">
-    <h3>Меню</h3>
+    <div class="menu-header">
+        <div class="menu-title">VELLUM</div>
+    </div>
     <div class="menu-item" onclick="openProfile()">Профиль</div>
     <div class="menu-item">Настройки (soon)</div>
     <div class="menu-item">VELLUM+ (soon)</div>
@@ -22,42 +24,53 @@
 
     <div id="top-bar">
         <button id="menu-btn" onclick="toggleMenu()">☰</button>
-        <h2>VELLUM</h2>
+        <div class="top-title">VELLUM</div>
     </div>
 
+    <!-- Экран авторизации -->
     <div id="auth">
         <h1>VELLUM</h1>
 
-        <div class="card">
-            <h2>Login</h2>
-            <input id="login-username" placeholder="Username">
-            <input id="login-password" type="password" placeholder="Password">
-            <button onclick="login()">Login</button>
-        </div>
+        <div class="auth-row">
+            <div class="card">
+                <h2>Login</h2>
+                <input id="login-username" placeholder="@username">
+                <input id="login-password" type="password" placeholder="Password">
+                <button onclick="login()">Login</button>
+            </div>
 
-        <div class="card">
-            <h2>Register</h2>
-            <input id="reg-username" placeholder="Username">
-            <input id="reg-password" type="password" placeholder="Password">
-            <button onclick="register()">Register</button>
+            <div class="card">
+                <h2>Register</h2>
+                <input id="reg-username" placeholder="@username">
+                <input id="reg-password" type="password" placeholder="Password">
+                <button onclick="register()">Register</button>
+            </div>
         </div>
     </div>
 
+    <!-- Основное приложение -->
     <div id="app" class="hidden">
-        <div id="sidebar">
-            <div class="section-title">Поиск пользователя</div>
-            <input id="search-user" placeholder="Username...">
-            <button class="small-btn" onclick="searchUser()">Найти</button>
+        <div id="left-panel">
+            <div class="search-block">
+                <input id="search-query" placeholder="Поиск по @username или ID">
+                <button class="small-btn" onclick="searchUser()">Поиск</button>
+            </div>
+
             <div id="search-results"></div>
 
             <div class="section-title">Чаты</div>
             <div id="chat-list"></div>
         </div>
 
-        <div id="chat">
+        <div id="right-panel">
             <div id="chat-header">
-                <div id="chat-partner-name">Выберите чат</div>
+                <div>
+                    <div id="chat-partner-name" class="chat-title">Выберите чат</div>
+                    <div id="chat-partner-id" class="chat-subtitle"></div>
+                </div>
+                <button id="call-btn" onclick="startCall()" disabled>📞</button>
             </div>
+
             <div id="messages"></div>
 
             <div id="input-area">
@@ -67,7 +80,18 @@
         </div>
     </div>
 
-    <div id="profile" class="modal hidden"></div>
+    <!-- Модалка профиля -->
+    <div id="profile-modal" class="modal hidden"></div>
+
+    <!-- Модалка звонка -->
+    <div id="call-modal" class="modal hidden">
+        <div id="call-status">Calling...</div>
+        <div id="call-user-info"></div>
+        <div class="call-buttons">
+            <button id="call-accept" onclick="acceptCall()">Принять</button>
+            <button id="call-end" onclick="endCall()">Завершить</button>
+        </div>
+    </div>
 
 </div>
 
