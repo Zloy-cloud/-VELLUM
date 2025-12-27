@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <title>VELLUM</title>
@@ -7,11 +7,11 @@
 </head>
 <body>
 
-<!-- Выдвижное меню (как сайдбар настроек) -->
+<!-- Сайдбар-меню (похоже на телеграммное) -->
 <div id="side-menu">
     <div class="menu-header">
         <div class="menu-app">VELLUM</div>
-        <div class="menu-user" id="menu-user-label">@user</div>
+        <div class="menu-user" id="menu-user-label">@user | ID: 0</div>
     </div>
     <div class="menu-item" onclick="openMyProfile()">Мой профиль</div>
     <div class="menu-item">Настройки (скоро)</div>
@@ -23,13 +23,13 @@
 
 <div id="root">
 
-    <!-- Верхняя панель -->
+    <!-- Верхний бар -->
     <div id="top-bar">
         <button id="menu-btn" onclick="toggleMenu()">☰</button>
         <div class="top-title">VELLUM</div>
     </div>
 
-    <!-- Блок авторизации -->
+    <!-- ЭКРАН АВТОРИЗАЦИИ -->
     <div id="auth-screen">
         <div class="auth-center">
             <div class="auth-logo">VELLUM</div>
@@ -53,9 +53,9 @@
         </div>
     </div>
 
-    <!-- Основное приложение -->
+    <!-- ОСНОВНОЕ ПРИЛОЖЕНИЕ -->
     <div id="app-screen" class="hidden">
-        <!-- Левая колонка: чат‑лист и поиск -->
+        <!-- Левая колонка: список чатов -->
         <div id="left-column">
             <div id="left-header">
                 <div class="left-title">Чаты</div>
@@ -72,7 +72,7 @@
             <div id="chat-list"></div>
         </div>
 
-        <!-- Правая колонка: текущий чат -->
+        <!-- Правая колонка: чат -->
         <div id="right-column">
             <div id="chat-header">
                 <div class="chat-header-left" onclick="openCurrentPartnerProfile()">
@@ -94,7 +94,7 @@
         </div>
     </div>
 
-    <!-- Модалка профиля (любой пользователь: я или другой) -->
+    <!-- Модалка профиля -->
     <div id="profile-modal" class="modal hidden"></div>
 
     <!-- Модалка звонка -->
@@ -113,4 +113,5 @@
 <script src="script.js"></script>
 </body>
 </html>
+
 
