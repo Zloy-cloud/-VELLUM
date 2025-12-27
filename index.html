@@ -7,6 +7,18 @@
 </head>
 <body>
     
+<div id="side-menu">
+    <h3>Меню</h3>
+
+    <div class="menu-item" onclick="openProfile()">Профиль</div>
+    <div class="menu-item">Настройки</div>
+    <div class="menu-item">Премиум (VELLUM+)</div>
+    <div class="menu-item">Подарки</div>
+    <div class="menu-item" onclick="logout()">Выйти</div>
+</div>
+
+<div id="menu-overlay" onclick="toggleMenu()"></div>
+    
 <div id="top-bar">
     <button id="menu-btn" onclick="toggleMenu()">☰</button>
     <h2>VELLUM</h2>
