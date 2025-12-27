@@ -1,5 +1,4 @@
-// ВСТАВЬ СЮДА СВОЙ BACKEND URL
-// пример: const API = "https://my-messenger-7pn7.onrender.com";
+// ВСТАВЬ СВОЙ BACKEND URL
 const API = "https://my-messenger-7pn7.onrender.com";
 
 let token = null;
@@ -14,7 +13,7 @@ let peer = null;
 let localStream = null;
 let inCallWith = null;
 
-// ====== AUTH ======
+// ========== AUTH ==========
 
 function register() {
     const username = document.getElementById("reg-username").value;
@@ -30,7 +29,7 @@ function register() {
         if (d.error) {
             alert("Error: " + d.error);
         } else {
-            alert("Registered! Now login.");
+            alert("Зарегистрирован! Теперь войдите.");
         }
     });
 }
@@ -49,7 +48,8 @@ function login() {
         if (d.token) {
             token = d.token;
             currentUser = parseJwt(token);
-            document.getElementById("menu-user-label").innerText = "@" + currentUser.username + " | ID: " + currentUser.id;
+            document.getElementById("menu-user-label").innerText =
+                "@" + currentUser.username + " | ID: " + currentUser.id;
             initApp();
         } else {
             alert("Login failed: " + (d.error || "Unknown error"));
@@ -63,7 +63,7 @@ function logout() {
     location.reload();
 }
 
-// ====== INIT APP ======
+// ========== INIT APP ==========
 
 function initApp() {
     document.getElementById("auth-screen").classList.add("hidden");
@@ -78,7 +78,7 @@ function initApp() {
         }
     });
 
-    // сигнальный слой звонков
+    // Сигналинг звонков
     socket.on("call_incoming", ({ from }) => {
         if (inCallWith) {
             socket.emit("call_end", { to: from });
@@ -117,7 +117,7 @@ function initApp() {
     loadChats();
 }
 
-// ====== MENU ======
+// ========== MENU ==========
 
 function toggleMenu() {
     const menu = document.getElementById("side-menu");
@@ -132,7 +132,7 @@ function toggleMenu() {
     }
 }
 
-// ====== CHATS ======
+// ========== CHATS ==========
 
 function loadChats() {
     fetch(API + "/chats", {
@@ -260,7 +260,7 @@ function sendMessage() {
     input.value = "";
 }
 
-// ====== SEARCH USERS (ID / @username) ======
+// ========== SEARCH USERS ==========
 
 function searchUser() {
     const q = document.getElementById("search-query").value;
@@ -335,21 +335,18 @@ function createChatWithUser(id) {
     });
 }
 
-// ====== ПРОФИЛИ ======
+// ========== ПРОФИЛИ ==========
 
-// Мой профиль из сайдбара
 function openMyProfile() {
     if (!currentUser) return;
     openUserProfile(currentUser.id, true);
 }
 
-// Профиль текущего собеседника по клику на шапку чата
 function openCurrentPartnerProfile() {
     if (!currentChatPartner) return;
     openUserProfile(currentChatPartner.id, false);
 }
 
-// Просмотр любого профиля (я / другой)
 function openUserProfile(userId, isMe) {
     fetch(API + "/user/" + userId, {
         headers: { "Authorization": "Bearer " + token }
@@ -359,9 +356,7 @@ function openUserProfile(userId, isMe) {
         const box = document.getElementById("profile-modal");
         box.classList.remove("hidden");
 
-        const avatarUrl = u.avatar || "https://via.placeholder.com/80x80.png?text=V";
         const header = isMe ? "Мой профиль" : "Профиль пользователя";
-
         box.innerHTML = `
             <h2>${header}</h2>
             <p>@${u.username}</p>
@@ -402,20 +397,19 @@ function saveProfile() {
             alert("Error: " + d.error);
         } else {
             alert("Профиль обновлён");
-            document.getElementById("menu-user-label").innerText = "@" + d.user.username + " | ID: " + d.user.id;
+            document.getElementById("menu-user-label").innerText =
+                "@" + d.user.username + " | ID: " + d.user.id;
             openMyProfile();
         }
     });
 }
 
-// ====== CALL (audio only, без камеры) ======
+// ========== CALL (audio only) ==========
 
 async function createPeer(targetId) {
     inCallWith = targetId;
     peer = new RTCPeerConnection({
-        iceServers: [
-            { urls: "stun:stun.l.google.com:19302" }
-        ]
+        iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
     });
 
     peer.onicecandidate = event => {
@@ -467,8 +461,7 @@ async function startCall() {
     showCallModal("Звонок...", "@" + currentChatPartner.username + " (ID: " + targetId + ")", false);
 }
 
-async function acceptCall() {
-    // offer уже обработан, peer создан в socket.on("call_offer")
+function acceptCall() {
     hideCallModal();
 }
 
@@ -495,10 +488,11 @@ function endCallInternal(statusText) {
     inCallWith = null;
 }
 
-// ====== JWT ======
+// ========== JWT ==========
 
 function parseJwt(t) {
     return JSON.parse(atob(t.split('.')[1]));
 }
+
 
 
