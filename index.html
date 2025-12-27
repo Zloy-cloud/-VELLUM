@@ -6,64 +6,73 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
+
+<!-- Выдвижное меню -->
 <div id="side-menu">
     <h3>Меню</h3>
-
     <div class="menu-item" onclick="openProfile()">Профиль</div>
-    <div class="menu-item">Настройки</div>
-    <div class="menu-item">Премиум (VELLUM+)</div>
-    <div class="menu-item">Подарки</div>
+    <div class="menu-item">Настройки (soon)</div>
+    <div class="menu-item">VELLUM+ (soon)</div>
+    <div class="menu-item">Подарки (soon)</div>
     <div class="menu-item" onclick="logout()">Выйти</div>
 </div>
-
 <div id="menu-overlay" onclick="toggleMenu()"></div>
-    
-<div id="top-bar">
-    <button id="menu-btn" onclick="toggleMenu()">☰</button>
-    <h2>VELLUM</h2>
-</div>
 
-<div id="auth">
-    <h1>VELLUM</h1>
+<div id="main-container">
 
-    <div class="card">
-        <h2>Login</h2>
-        <input id="login-username" placeholder="Username">
-        <input id="login-password" type="password" placeholder="Password">
-        <button onclick="login()">Login</button>
+    <div id="top-bar">
+        <button id="menu-btn" onclick="toggleMenu()">☰</button>
+        <h2>VELLUM</h2>
     </div>
 
-    <div class="card">
-        <h2>Register</h2>
-        <input id="reg-username" placeholder="Username">
-        <input id="reg-password" type="password" placeholder="Password">
-        <button onclick="register()">Register</button>
-    </div>
-</div>
+    <div id="auth">
+        <h1>VELLUM</h1>
 
-<div id="app" class="hidden">
-    <div id="sidebar">
-        <h2>Chats</h2>
-        <div id="chat-list"></div>
+        <div class="card">
+            <h2>Login</h2>
+            <input id="login-username" placeholder="Username">
+            <input id="login-password" type="password" placeholder="Password">
+            <button onclick="login()">Login</button>
+        </div>
 
-        <div class="new-chat">
-            <input id="partner-id" placeholder="Partner ID">
-            <button onclick="createChat()">+</button>
+        <div class="card">
+            <h2>Register</h2>
+            <input id="reg-username" placeholder="Username">
+            <input id="reg-password" type="password" placeholder="Password">
+            <button onclick="register()">Register</button>
         </div>
     </div>
 
-    <div id="chat">
-        <div id="messages"></div>
+    <div id="app" class="hidden">
+        <div id="sidebar">
+            <div class="section-title">Поиск пользователя</div>
+            <input id="search-user" placeholder="Username...">
+            <button class="small-btn" onclick="searchUser()">Найти</button>
+            <div id="search-results"></div>
 
-        <div id="input-area">
-            <input id="msg-input" placeholder="Message...">
-            <button onclick="sendMessage()">Send</button>
+            <div class="section-title">Чаты</div>
+            <div id="chat-list"></div>
+        </div>
+
+        <div id="chat">
+            <div id="chat-header">
+                <div id="chat-partner-name">Выберите чат</div>
+            </div>
+            <div id="messages"></div>
+
+            <div id="input-area">
+                <input id="msg-input" placeholder="Message...">
+                <button onclick="sendMessage()">Send</button>
+            </div>
         </div>
     </div>
+
+    <div id="profile" class="modal hidden"></div>
+
 </div>
 
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
+
